@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870916027714",
+    "project_id": "sherlockstudios-e2b5a",
+    "storage_bucket": "sherlockstudios-e2b5a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870916027714:android:559bde94620f79502444db",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.SherlockStudios"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCGSX2Vz72S8sBSEdKhjkW5PjJlAJxyOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
