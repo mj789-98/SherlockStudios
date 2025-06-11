@@ -1,0 +1,53 @@
+Unity Developer Internship Assignment
+Duration: 3 Days
+Assignment Goal: Build a simple card game prototype with player authentication, profile picture update functionality, and integrated Google Ads.
+Project Overview
+You are required to build a basic 1v1 card game (like higher card wins or war-style). Include player login using Google or Facebook, display player profiles with editable profile picture, and show test ads using Google AdMob.
+What to build
+1. Card Game Logic
+* Create a 1v1 game setup (AI or local player-vs-player).
+* Deck of 52 cards shuffled at the start.
+* Each player draws one card.
+* Higher card wins, points update after each round.
+* First to 5 wins is declared winner.
+1. Authentication
+* Implement sign-in using Google or Facebook SDK.
+* After login, fetch and display user name and email.
+* Use Firebase for basic authentication backend (optional).
+1. Player Profile UI
+* After login, show player profile with:
+* Name
+* Profile picture
+* Scoreboard
+* Allow player to change their profile picture from gallery or pre-loaded avatar set.
+1. Google AdMob Integration
+* Integrate Google AdMob test ads:
+* One banner ad in the main menu.
+* One interstitial ad after 3 game rounds.
+1. Game UI Requirements
+* Clean, responsive UI layout.
+* Separate screens for:
+* Splash screen
+* Login screen
+* Main Menu (with Start Game, Profile, Logout)
+* Game screen
+* Win screen
+1. Tech Stack & Tools
+* Unity 2021.3+ or newer
+* Firebase SDK / Facebook SDK / Google Sign-In SDK
+* Google AdMob (use test ad unit IDs)
+* Any free card deck assets or Unity UI assets
+* GitHub or Google Drive to submit final files
+Submission Requirements
+* APK file + video demo (screen recording)
+* GitHub link or .zip of full project folder
+* Short README file explaining setup & features
+Bonus (not compulsory)
+* Add sound effects or music
+* Add simple animations during card draw
+Evaluation Criteria
+* Code quality and file structure
+* UI/UX smoothness
+* Working functionality
+* Creativity and completeness
+* Error handling and stability
