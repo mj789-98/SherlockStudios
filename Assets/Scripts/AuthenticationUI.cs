@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Firebase.Auth;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class AuthenticationUI : MonoBehaviour
 {
@@ -30,12 +32,24 @@ public class AuthenticationUI : MonoBehaviour
             AuthenticationManager.Instance.OnSignInFailed.AddListener(OnSignInFailed);
             AuthenticationManager.Instance.OnSignOut.AddListener(OnSignOut);
         }
+        else
+        {
+            Debug.LogWarning("AuthenticationManager.Instance is null in AuthenticationUI.Start()");
+        }
 
+        // Clear any previous status messages
+        UpdateStatus("Ready to sign in");
         UpdateUI();
     }
 
     public async void SignIn()
     {
+        if (AuthenticationManager.Instance == null)
+        {
+            UpdateStatus("Authentication system not ready");
+            return;
+        }
+        
         if (string.IsNullOrEmpty(emailInput.text) || string.IsNullOrEmpty(passwordInput.text))
         {
             UpdateStatus("Please enter email and password");
@@ -58,6 +72,12 @@ public class AuthenticationUI : MonoBehaviour
 
     public async void SignUp()
     {
+        if (AuthenticationManager.Instance == null)
+        {
+            UpdateStatus("Authentication system not ready");
+            return;
+        }
+        
         if (string.IsNullOrEmpty(emailInput.text) || string.IsNullOrEmpty(passwordInput.text))
         {
             UpdateStatus("Please enter email and password");
@@ -103,6 +123,23 @@ public class AuthenticationUI : MonoBehaviour
         UpdateStatus($"Signed in successfully!");
         UpdateUserInfo();
         UpdateUI();
+        
+        // Automatically transition to main menu after successful login
+        StartCoroutine(TransitionToMainMenu());
+    }
+    
+    private System.Collections.IEnumerator TransitionToMainMenu()
+    {
+        yield return new WaitForSeconds(1f); // Brief delay to show success message
+        
+        if (SceneController.Instance != null)
+        {
+            SceneController.Instance.LoadMainMenu();
+        }
+        else
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     private void OnSignInFailed(string error)

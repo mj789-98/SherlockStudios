@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public TMPro.TextMeshProUGUI aiScoreText;
     public TMPro.TextMeshProUGUI roundResultText;
     public TMPro.TextMeshProUGUI roundCounterText;
+    public Button mainMenuButton;
+    public Button playAgainButton;
     
     [Header("Card Display")]
     public Image playerCardDisplay;
@@ -57,12 +59,26 @@ public class GameManager : MonoBehaviour
     {
         deck = new CardDeck();
         drawCardButton.onClick.AddListener(PlayRound);
+        
+        // Setup UI button listeners
+        if (mainMenuButton != null)
+            mainMenuButton.onClick.AddListener(ReturnToMainMenu);
+        if (playAgainButton != null)
+            playAgainButton.onClick.AddListener(PlayAgain);
+        
+        // Generate card sprites if they're missing
+        GenerateCardSpritesIfNeeded();
+        
         UpdateScoreUI();
         ResetCardDisplay();
+        
+        // Start the game automatically
+        StartNewGame();
     }
     
     public void StartNewGame()
     {
+        Debug.Log("Starting new game!");
         playerWins = 0;
         aiWins = 0;
         currentRound = 0;
@@ -71,21 +87,35 @@ public class GameManager : MonoBehaviour
         roundInProgress = false;
         UpdateScoreUI();
         ResetCardDisplay();
-        winScreen.SetActive(false);
-        drawCardButton.interactable = true;
-        roundResultText.text = "Click 'Draw Cards' to start!";
+        if (winScreen != null) winScreen.SetActive(false);
+        if (drawCardButton != null) 
+        {
+            drawCardButton.interactable = true;
+            Debug.Log("Draw card button enabled");
+        }
+        if (roundResultText != null) 
+            roundResultText.text = "Click 'Draw Cards' to start!";
+        else
+            Debug.LogWarning("Round result text is null!");
     }
     
     public void PlayRound()
     {
+        Debug.Log($"PlayRound called - gameInProgress: {gameInProgress}, roundInProgress: {roundInProgress}");
+        
         if (!gameInProgress || roundInProgress) return;
         
         roundInProgress = true;
-        drawCardButton.interactable = false;
+        if (drawCardButton != null) 
+            drawCardButton.interactable = false;
         currentRound++;
+        
+        Debug.Log($"Playing round {currentRound}");
         
         Card playerCard = deck.DrawCard();
         Card aiCard = deck.DrawCard();
+        
+        Debug.Log($"Player card: {playerCard}, AI card: {aiCard}");
         
         StartCoroutine(RevealCards(playerCard, aiCard));
         
@@ -254,5 +284,41 @@ public class GameManager : MonoBehaviour
     public void PlayAgain()
     {
         StartNewGame();
+    }
+    
+    private void GenerateCardSpritesIfNeeded()
+    {
+        // Check if card sprites are missing
+        bool needsGeneration = false;
+        
+        if (cardBackImage == null)
+            needsGeneration = true;
+            
+        for (int i = 0; i < heartSprites.Length; i++)
+        {
+            if (heartSprites[i] == null || diamondSprites[i] == null || 
+                clubSprites[i] == null || spadeSprites[i] == null)
+            {
+                needsGeneration = true;
+                break;
+            }
+        }
+        
+        if (needsGeneration)
+        {
+            Debug.Log("Card sprites missing, generating simple card sprites...");
+            SimpleCardCreator cardCreator = FindObjectOfType<SimpleCardCreator>();
+            if (cardCreator != null)
+            {
+                cardCreator.GenerateSimpleCardSprites();
+            }
+            else
+            {
+                Debug.LogWarning("SimpleCardCreator not found in scene, adding one...");
+                GameObject creatorObj = new GameObject("SimpleCardCreator");
+                SimpleCardCreator creator = creatorObj.AddComponent<SimpleCardCreator>();
+                creator.GenerateSimpleCardSprites();
+            }
+        }
     }
 }

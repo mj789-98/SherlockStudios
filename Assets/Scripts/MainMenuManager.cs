@@ -30,14 +30,21 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
 
-    private void ShowProfile()
+    private async void ShowProfile()
     {
-         // First, tell the ProfileManager to fetch the latest data
-    if (ProfileManager.Instance != null)
-    {
-        ProfileManager.Instance.LoadUserProfile();
-    }
+        // Show profile panel immediately but with loading state
         profilePanel.SetActive(true);
+        
+        // Then refresh the data from Firebase
+        if (ProfileManager.Instance != null)
+        {
+            Debug.Log("Refreshing profile data from Firebase...");
+            await ProfileManager.Instance.RefreshUserProfileAsync();
+        }
+        else
+        {
+            Debug.LogError("ProfileManager.Instance is null!");
+        }
     }
 
     private void Logout()

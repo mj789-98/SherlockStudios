@@ -466,6 +466,8 @@ MonoBehaviour:
   aiScoreText: {fileID: 1776016307}
   roundResultText: {fileID: 1114838052}
   roundCounterText: {fileID: 1386837463}
+  mainMenuButton: {fileID: 0}
+  playAgainButton: {fileID: 0}
   playerCardDisplay: {fileID: 665205894}
   aiCardDisplay: {fileID: 1766523917}
   playerCardText: {fileID: 347613937}
@@ -1172,7 +1174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -112.00003, y: 465}
+  m_AnchoredPosition: {x: -28, y: 345}
   m_SizeDelta: {x: 244, y: 106.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &747882158

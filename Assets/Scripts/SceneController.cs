@@ -101,11 +101,8 @@ public class SceneController : MonoBehaviour
                 break;
 
             case "GameScene":
-                // Initialize game
-                if (GameManager.Instance != null)
-                {
-                    GameManager.Instance.StartNewGame();
-                }
+                // Initialize game - wait a frame for GameManager to initialize
+                StartCoroutine(InitializeGameScene());
                 break;
 
             case "LoginScreen":
@@ -115,6 +112,22 @@ public class SceneController : MonoBehaviour
                     AdManager.Instance.HideBannerAd();
                 }
                 break;
+        }
+    }
+
+    private IEnumerator InitializeGameScene()
+    {
+        // Wait a frame for GameManager to be fully initialized
+        yield return new WaitForEndOfFrame();
+        
+        if (GameManager.Instance != null)
+        {
+            Debug.Log("SceneController: Initializing GameManager");
+            GameManager.Instance.StartNewGame();
+        }
+        else
+        {
+            Debug.LogWarning("SceneController: GameManager.Instance is null!");
         }
     }
 
