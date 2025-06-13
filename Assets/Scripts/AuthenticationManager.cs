@@ -187,8 +187,16 @@ public class AuthenticationManager : MonoBehaviour
         }
         catch (FirebaseException ex)
         {
-            Debug.LogError($"User creation failed: {ex.Message}");
-            OnSignInFailed.Invoke($"User creation failed: {ex.Message}");
+            var authError = (AuthError)ex.ErrorCode;
+            string errorMessage = GetUserFriendlyErrorMessage(authError, ex.Message);
+            Debug.LogError($"User creation failed: {authError} - {errorMessage}");
+            OnSignInFailed.Invoke($"User creation failed: {errorMessage}");
+            return false;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Unexpected error during user creation: {ex.Message}");
+            OnSignInFailed.Invoke($"Unexpected error: {ex.Message}");
             return false;
         }
     }
@@ -259,6 +267,52 @@ public class AuthenticationManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    private string GetUserFriendlyErrorMessage(AuthError authError, string originalMessage)
+    {
+        switch (authError)
+        {
+            case AuthError.EmailAlreadyInUse:
+                return "This email address is already registered. Please use a different email or sign in instead.";
+            case AuthError.InvalidEmail:
+                return "Please enter a valid email address.";
+            case AuthError.WeakPassword:
+                return "Password is too weak. Please choose a stronger password with at least 6 characters.";
+            case AuthError.WrongPassword:
+                return "Incorrect password. Please try again.";
+            case AuthError.UserNotFound:
+                return "No account found with this email address. Please check your email or create a new account.";
+            case AuthError.UserDisabled:
+                return "This account has been disabled. Please contact support for assistance.";
+            case AuthError.TooManyRequests:
+                return "Too many failed attempts. Please wait a moment before trying again.";
+            case AuthError.NetworkRequestFailed:
+                return "Network error. Please check your internet connection and try again.";
+            case AuthError.MissingEmail:
+                return "Please enter your email address.";
+            case AuthError.MissingPassword:
+                return "Please enter your password.";
+            case AuthError.RequiresRecentLogin:
+                return "This operation requires recent authentication. Please sign out and sign in again.";
+            case AuthError.AccountExistsWithDifferentCredentials:
+                return "An account already exists with the same email but different sign-in credentials.";
+            case AuthError.CredentialAlreadyInUse:
+                return "This credential is already associated with a different user account.";
+            case AuthError.InvalidCredential:
+                return "The provided credentials are invalid. Please check and try again.";
+            case AuthError.OperationNotAllowed:
+                return "This sign-in method is not enabled. Please contact support.";
+            case AuthError.InvalidUserToken:
+                return "Your session has expired. Please sign in again.";
+            case AuthError.UserTokenExpired:
+                return "Your session has expired. Please sign in again.";
+            case AuthError.Cancelled:
+                return "Operation was cancelled.";
+            default:
+                // Return the original message for unknown errors
+                return string.IsNullOrEmpty(originalMessage) ? "An unexpected error occurred. Please try again." : originalMessage;
+        }
     }
 
     public string GetUserInfo()
